@@ -209,6 +209,7 @@ bool register_algo_gate( int algo, algo_gate_t *gate )
      case ALGO_XEVAN:        register_xevan_algo       ( gate ); break;
      case ALGO_YESCRYPT:     register_yescrypt_algo    ( gate ); break;
      case ALGO_ZR5:          register_zr5_algo         ( gate ); break;
+     case ALGO_BINARIUM_HASH_V1:          register_Binarium_hash_v1_algo         ( gate ); break;
 
 // restore warnings
 #pragma GCC diagnostic pop

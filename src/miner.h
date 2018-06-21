@@ -535,6 +535,7 @@ enum algos {
         ALGO_XEVAN,
         ALGO_YESCRYPT,
         ALGO_ZR5,
+        ALGO_BINARIUM_HASH_V1,
         ALGO_COUNT
 };
 static const char* const algo_names[] = {
@@ -599,6 +600,7 @@ static const char* const algo_names[] = {
         "xevan",
         "yescrypt",
         "zr5",
+        "Binarium_hash_v1",
         "\0"
 };
 
@@ -717,6 +719,7 @@ Options:\n\
                           xevan        Bitsend\n\
                           yescrypt\n\
                           zr5          Ziftr\n\
+                          Binarium_hash_v1          Binarium\n\
   -o, --url=URL         URL of mining server\n\
   -O, --userpass=U:P    username:password pair for mining server\n\
   -u, --user=USERNAME   username for mining server\n\

@@ -135,9 +135,19 @@ cpuminer_SOURCES = \
   algo/xevan.c \
   algo/yescrypt/yescrypt.c \
   algo/yescrypt/yescrypt-common.c \
-  algo/yescrypt/sha256_Y.c\
-  algo/yescrypt/yescrypt-simd.c\
-  algo/zr5.c
+  algo/yescrypt/sha256_Y.c \
+  algo/yescrypt/yescrypt-simd.c \
+  algo/zr5.c \
+  algo/binarium_hash_v1/binarium_hash_v1.c \
+  algo/binarium_hash_v1/hashing/streebog/table/stribog.c \
+  algo/binarium_hash_v1/hashing/whirlpool/whirlpool.c \
+  algo/binarium_hash_v1/hashing/whirlpool/byte_order.c \
+  algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised.c \
+  algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised_tables.c \
+  algo/binarium_hash_v1/encryption/gost2015_kuznechik/shared/tables.c \
+  algo/binarium_hash_v1/encryption/three_fish/libskein_skein.cc \
+  algo/binarium_hash_v1/encryption/salsa20/salsa20.c \
+  algo/binarium_hash_v1/open_ssl/camellia/camellia.c
 
 
 disable_flags =
