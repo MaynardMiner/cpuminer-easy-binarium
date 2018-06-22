@@ -101,9 +101,9 @@ cpuminer_SOURCES = \
   algo/lyra2/zcoin.c \
   algo/lyra2/lyra2z330.c \
   algo/keccak/sse2/keccak.c \
-  algo/m7m.c \
   algo/neoscrypt.c \
   algo/nist5.c \
+  algo/m7m.c \
   algo/pluck.c \
   algo/quark/quark.c \
   algo/qubit/qubit.c \
@@ -142,12 +142,16 @@ cpuminer_SOURCES = \
   algo/binarium_hash_v1/hashing/streebog/table/stribog.c \
   algo/binarium_hash_v1/hashing/whirlpool/whirlpool.c \
   algo/binarium_hash_v1/hashing/whirlpool/byte_order.c \
+  algo/binarium_hash_v1/encryption/gost2015_kuznechik/shared/tables.c \
   algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised.c \
   algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised_tables.c \
-  algo/binarium_hash_v1/encryption/gost2015_kuznechik/shared/tables.c \
   algo/binarium_hash_v1/encryption/three_fish/libskein_skein.cc \
   algo/binarium_hash_v1/encryption/salsa20/salsa20.c \
   algo/binarium_hash_v1/open_ssl/camellia/camellia.c
+
+  #algo/binarium_hash_v1/encryption/gost2015_kuznechik/compact.c
+  #algo/binarium_hash_v1/encryption/gost2015_kuznechik/SIMD_tables.c
+  #algo/binarium_hash_v1/encryption/gost2015_kuznechik/SIMD.c
 
 
 disable_flags =

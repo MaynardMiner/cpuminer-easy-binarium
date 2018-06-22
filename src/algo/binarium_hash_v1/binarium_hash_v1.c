@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdint.h>
 
+#include <inttypes.h>
+
 #include "algo/blake/sph_blake.h"
 #include "algo/bmw/sph_bmw.h"
 #include "algo/groestl/sph_groestl.h"
@@ -182,13 +184,50 @@ void IntermediateHashFunction_Whirlpool ( const void * _pData, const uint32_t _i
 
 //---Encryption.----------------------------------------------------------------------
 void IntermediateEncryptionFunction_GOST_2015_Kuznechik ( const void * _pData, const uint32_t _iDataSize, const void * _pKey, void * _pResult ) {
+    /*char block_str [ 129 ];
+    //char hash_str [ 129 ];
+    char roundkeys_str [ 401 ];
+
+    //uint32_t hash [ 1 ] [ 16 ];
+
     //uint64_t iIndex = GetUint64IndexFrom512BitsKey ( _pKey, 0 );
     //iIndex = iIndex % chainActive.Height ();
 
-    encryptBlockWithGost15 ( _pKey, ( unsigned char * ) _pResult );           // _pKey & chainActive [ chainActive.Height () - iIndex ] -> nVersion
-    encryptBlockWithGost15 ( _pData, ( unsigned char * ) _pResult + 16 );     // _pData
-    encryptBlockWithGost15 ( _pKey, ( unsigned char * ) _pResult + 32 );      // _pKey
-    encryptBlockWithGost15 ( _pData, ( unsigned char * ) _pResult + 48 );     // _pData
+    //memcpy ( hash [ 0 ], _pData, 64 );
+
+    bin2hex(roundkeys_str, (unsigned char *) _pData, 200 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : roundkeys_str : %s.", roundkeys_str );
+
+    bin2hex(block_str, (unsigned char *) _pResult, 64 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pResult : %s.", block_str );
+
+    bin2hex(block_str, (unsigned char *) _pKey, 64 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pKey : %s.", block_str );*/
+    encryptBlockWithGost15 ( _pKey, ( ( unsigned char * ) _pResult ) );           // _pKey
+    /*bin2hex(block_str, (unsigned char *) _pResult, 64 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pResult : %s.", block_str );
+
+    bin2hex(block_str, (unsigned char *) _pData, 64 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pData : %s.", block_str );*/
+    encryptBlockWithGost15 ( _pData, ( ( unsigned char * ) _pResult + 16 ) );     // _pData
+    /*bin2hex(block_str, (unsigned char *) _pResult, 64 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pResult : %s.", block_str );*/
+
+    /*decryptBlockWithGost15 ( _pData, ( ( unsigned char * ) _pResult + 16 ) );
+    bin2hex(block_str, (unsigned char *) _pResult, 64 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pResult decrypted : %s.", block_str );*/
+
+    /*bin2hex(block_str, (unsigned char *) _pKey, 64 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pKey : %s.", block_str );*/
+    encryptBlockWithGost15 ( _pKey, ( ( unsigned char * ) _pResult + 32 ) );      // _pKey
+    /*bin2hex(block_str, (unsigned char *) _pResult, 64 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pResult : %s.", block_str );
+
+    bin2hex(block_str, (unsigned char *) _pData, 64 );
+    applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pData : %s.", block_str );*/
+    encryptBlockWithGost15 ( _pData, ( ( unsigned char * ) _pResult + 48 ) );     // _pData
+    //bin2hex(block_str, (unsigned char *) _pResult, 64 );
+    //applog ( LOG_DEBUG, "DEBUG: IntermediateEncryptionFunction_GOST_2015_Kuznechik () : _pResult : %s.", block_str );
 }
 
 void IntermediateEncryptionFunction_ThreeFish ( const void * _pData, const uint32_t _iDataSize, const void * _pKey, void * _pResult ) {
@@ -315,29 +354,63 @@ void Binarium_hash_v1_hash_Implementation ( void *state, const void *input, uint
     uint64_t iIndex;
 
     uint32_t i = 0;
+    uint32_t j = 0;
+
+    char sBlockData [ 161 ];
+    char hash_str[129];
+    char hash_1024_str[257];
 
 
+
+    // Important!
+    memset ( hash, 0, sizeof(hash) ); 
+
+
+
+    //applog ( LOG_DEBUG, "DEBUG: p_nBits : %i.", * p_nBits );
+
+    //bin2hex ( sBlockData, (unsigned char *) input, 80 );
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : sBlockData : %s.", sBlockData );
 
     // blake512
     aIntermediateHashFunctions [ 0 ] ( input, len, NULL, hash [ 0 ] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 0 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : blake512 : %s.", hash_str );
 
     // bmw512
     aIntermediateHashFunctions [ 1 ] ( hash [ 0 ], 64, NULL, uint512AdditionalHash );
+    //bin2hex(hash_str, (unsigned char *) uint512AdditionalHash, 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : bmw512 : %s.", hash_str );
 
     iWeekNumber = _iTimeFromGenesisBlock / I_ALGORITHM_RECONFIGURATION_TIME_PERIOD_IN_SECONDS * I_ALGORITHM_RECONFIGURATION_TIME_PERIOD_IN_SECONDS;
     iIndex = ( iWeekNumber + * p_nBits ) % I_AMOUNT_OF_INTERMEDIATE_HASH_FUNCTIONS;
     aIntermediateHashFunctions [ iIndex ] ( uint512AdditionalHash, 64, NULL, hash [ 1 ] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 1 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : aIntermediateHashFunctions 1 : %s.", hash_str );
 
     // groestl512
     aIntermediateHashFunctions [ 2 ] ( hash [ 1 ], 64, NULL, hash [ 2 ] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 2 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : groestl512 : %s.", hash_str );
 
     // skein512
-    aIntermediateHashFunctions [ 5 ] ( hash [ 2 ], 64, NULL, uint1024CombinedHashes + 64 );
+    for ( i = 0; i < 32; i ++ )
+        uint1024CombinedHashes [ i ] = 0;
+    //aIntermediateHashFunctions [ 5 ] ( hash [ 2 ], 64, NULL, uint1024CombinedHashes + 64 );
+    aIntermediateHashFunctions [ 5 ] ( hash [ 2 ], 64, NULL, ( (unsigned char *) uint1024CombinedHashes + 64 ) );
+    //aIntermediateHashFunctions [ 5 ] ( hash [ 2 ], 64, NULL, hash [ 3 ] );
+    //bin2hex ( hash_1024_str, ( unsigned char * ) uint1024CombinedHashes, 128 );
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : skein512 : %s.", hash_1024_str );
+    //bin2hex(hash_str, (unsigned char *)hash [ 3 ], 64);
+    //bin2hex(hash_1024_str, (unsigned char *)hash [ 3 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : skein512 : %s.", hash_1024_str );
 
     //-Streebog.--------------------------------------
     // jh512    
 
-    aIntermediateHashFunctions [ 3 ] ( uint1024CombinedHashes + 64, 64, NULL, uint1024CombinedHashes );
+    aIntermediateHashFunctions [ 3 ] ( ( ( unsigned char * ) uint1024CombinedHashes + 64 ), 64, NULL, uint1024CombinedHashes );
+    //bin2hex(hash_1024_str, (unsigned char *)uint1024CombinedHashes, 128);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : jh512 : %s.", hash_1024_str );
 
 
 
@@ -359,14 +432,14 @@ void Binarium_hash_v1_hash_Implementation ( void *state, const void *input, uint
             (
                 //  % I_AMOUNT_OF_BYTES_FOR_MEMORY_HARD_FUNCTION here is to prevent integer overflow
                 // on subsequent addition operation.
-                GetUint64IndexFrom512BitsKey ( uint1024CombinedHashes + 64, 0 ) % I_AMOUNT_OF_BYTES_FOR_MEMORY_HARD_FUNCTION +
+                GetUint64IndexFrom512BitsKey ( ( ( unsigned char * ) uint1024CombinedHashes + 64 ), 0 ) % I_AMOUNT_OF_BYTES_FOR_MEMORY_HARD_FUNCTION +
                 i * I_PRIME_NUMBER_FOR_MEMORY_HARD_HASHING )
             %
             ( I_AMOUNT_OF_BYTES_FOR_MEMORY_HARD_FUNCTION - 8 * ECRYPT_BLOCKLENGTH );
 
         // From previous encryption result in memory to next encryption result in memory.
         ECRYPT_encrypt_blocks ( & structECRYPT_ctx,
-            uint1024CombinedHashes + 64,
+            ( ( unsigned char * ) uint1024CombinedHashes + 64 ),
             & ( aMemoryArea [ iWriteIndex ] ),
             1 );  // 8
 
@@ -381,43 +454,70 @@ void Binarium_hash_v1_hash_Implementation ( void *state, const void *input, uint
 
     } //-for
 
+    //bin2hex(hash_1024_str, (unsigned char *) uint1024CombinedHashes, 128);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : Memory hard hashing function : %s.", hash_1024_str );
+
     //-Whirlpool--------------------------------------
     // keccak512
     aIntermediateHashFunctions [ 4 ] ( uint1024CombinedHashes, 128, NULL, hash[5] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 5 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : keccak512 : %s.", hash_str );
 
     //-SWIFFT.----------------------------------------
     // luffa512
     aIntermediateHashFunctions [ 6 ] ( hash[5], 64, NULL, hash[6] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 6 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : luffa512 : %s.", hash_str );
 
     // cubehash512
     aIntermediateHashFunctions [ 7 ] ( hash[6], 64, NULL, hash[7] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 7 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : cubehash512 : %s.", hash_str );
 
     //-GOST 2015_Kuznechik.---------------------------
     memcpy ( hash [ 6 ], hash [ 7 ], 64 );
     iIndex = ( iWeekNumber + * p_nBits ) % I_AMOUNT_OF_INTERMEDIATE_ENCRYPTION_FUNCTIONS;
+    //bin2hex(hash_str, (unsigned char *)hash [ 6 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : Data : %s.", hash_str );
+    //bin2hex(hash_str, (unsigned char *)hash [ 0 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : Key : %s.", hash_str );
     aIntermediateEncryptionFunctions [ iIndex ] ( hash[6], 64, hash[0], hash[7] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 7 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : aIntermediateEncryptionFunctions 1 : %i , %s.", iIndex, hash_str );
 
     // shavite512
     aIntermediateHashFunctions [ 8 ] ( hash[7], 64, NULL, hash[8] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 8 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : shavite512 : %s.", hash_str );
 
     //---ThreeFish.----------------------------------
 
     // simd512
     aIntermediateHashFunctions [ 9 ] ( hash[8], 64, NULL, uint512AdditionalHash );
+    //bin2hex(hash_str, (unsigned char *) uint512AdditionalHash, 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : simd512 : %s.", hash_str );
 
     iIndex = ( iWeekNumber + * p_nBits + 10 ) % I_AMOUNT_OF_INTERMEDIATE_HASH_FUNCTIONS;
     aIntermediateHashFunctions [ iIndex ] ( uint512AdditionalHash, 64, NULL, hash[9] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 9 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : aIntermediateHashFunctions 2 : %s.", hash_str );
 
     //---Camellia.-----------------------------------    
 
     // echo512
     aIntermediateHashFunctions [ 10 ] ( hash[9], 64, NULL, hash[10] );
+    //bin2hex(hash_str, (unsigned char *)hash [ 10 ], 64);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : echo512 : %s.\n", hash_str );
 
 
 
     //return hash[10].trim256();
+    //memcpy ( state, hash[10], 32 );
     memcpy ( state, hash[10], 32 );
     //memcpy( state, hash, 32 );
+
+    //bin2hex(hash_str, (unsigned char *) state, 32);
+    //applog ( LOG_DEBUG, "DEBUG: Binarium_hash_v1_hash_Implementation () : resulting hash : %s.\n", hash_str );
     
 }
 
@@ -539,6 +639,8 @@ static void Binarium_hash_v1_hash( void *state, const void *input )
     //uint32_t iHashFunctionsAmount;
     uint32_t * p_nTime = ( input + 4 + 32 + 32 );
 
+    //applog ( LOG_DEBUG, "DEBUG: nTime : %i.", * p_nTime );
+
     iTimeFromGenesisBlock = * p_nTime - GenesisBlock_nTime;
     //iHashFunctionsAmount = 2;
     //iAlgorithmSelector = iTimeFromGenesisBlock < 3528000 ? 0 : 1;
@@ -584,25 +686,36 @@ int scanhash_Binarium_hash_v1( int thr_id, struct work *work, uint32_t max_nonce
         // big endian encode 0..18 uint32_t, 64 bits at a time
         swab32_array( endiandata, pdata, 20 );
 
-        for (int m=0; m < 6; m++) 
+        /*for (int m=0; m < 6; m++) {
+          applog ( LOG_DEBUG, "DEBUG : scanhash_Binarium_hash_v1 () : Htarg : %u, mask : %u, m : %u .", Htarg, htmax[m], m );
           if (Htarg <= htmax[m])
           {
-            uint32_t mask = masks[m];
+            //applog ( LOG_DEBUG, "DEBUG : scanhash_Binarium_hash_v1 () : Htarg : %u, mask : %u, m : %u .", Htarg, htmax[m], m );
+            uint32_t mask = masks[m];*/
             do
             {
               pdata[19] = ++n;
+              //---For testing [.-------------------------------
+              //pdata[19] = 0;
+              //n = 0;
+              //---] For testing.-------------------------------
               be32enc( &endiandata[19], n );
               Binarium_hash_v1_hash( hash64, &endiandata );
-              if ( ( hash64[7] & mask ) == 0 )
-              {
-                 if ( fulltest( hash64, ptarget ) )
+              //if ( ( hash64[7] & mask ) == 0 )
+              //{
+              //   applog ( LOG_DEBUG, "DEBUG : scanhash_Binarium_hash_v1 () : hash64 [ 7 ] : %u, mask : %u .", hash64[7], mask );
+                 //if ( fulltest( hash64, ptarget ) )
+                 if (hash64[7] < Htarg && fulltest(hash64, ptarget))
                  {
                     *hashes_done = n - first_nonce + 1;
+                    //applog ( LOG_DEBUG, "DEBUG : scanhash_Binarium_hash_v1 () : Proof of work found : %" PRIu64 " .", *hashes_done );
                     return true;
                  }
-              }
+              //}
             } while ( n < max_nonce && !work_restart[thr_id].restart );
-          }
+          /*}
+
+        } //-for*/
 
         *hashes_done = n - first_nonce + 1;
         pdata[19] = n;

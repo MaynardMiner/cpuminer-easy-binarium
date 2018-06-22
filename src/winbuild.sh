@@ -18,8 +18,9 @@ rm -f config.status
 # Debian 7.7 / Ubuntu 14.04 (gcc 4.7+)
 #extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores"
 
-CFLAGS="-O3 -march=native -Wall" CXXFLAGS="$CFLAGS -std=gnu++11 -fpermissive" ./configure --with-curl
+CFLAGS="-O3 -march=native -Wall" CXXFLAGS="$CFLAGS -std=gnu++11 -fpermissive" ./configure --with-curl=/home/rodion/Downloads/Development/Libraries/curl-7.60.0/ --with-crypto=/home/rodion/Downloads/Development/Libraries/openssl-1.0.2o/ --with-gmp=/home/rodion/Downloads/Development/Libraries/gmp-6.1.2/ --host=x86_64-w64-mingw32
 
 make -j 4
 
-strip -s cpuminer
+#strip -s cpuminer
+strip -p --strip-debug --strip-unneeded cpuminer.exe

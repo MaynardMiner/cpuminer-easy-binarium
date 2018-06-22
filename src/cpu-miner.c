@@ -34,6 +34,7 @@
 #include <time.h>
 #include <signal.h>
 #include <memory.h>
+#include <assert.h>
 
 #include <curl/curl.h>
 #include <jansson.h>
@@ -1762,9 +1763,15 @@ static void *miner_thread( void *userdata )
        hashes_done = 0;
        gettimeofday( (struct timeval *) &tv_start, NULL );
 
+       //---For testing [.---------------------------------------------
+       //memset( &work, 0, sizeof(work) );
+
        // Scan for nonce
        nonce_found = (bool) algo_gate.scanhash( thr_id, &work, max_nonce,
                                                &hashes_done );
+
+       //assert ( false );
+       //---] For testing.---------------------------------------------
 
        // record scanhash elapsed time
        gettimeofday(&tv_end, NULL);
@@ -1791,6 +1798,10 @@ static void *miner_thread( void *userdata )
              g_work_time = 0;
              pthread_mutex_unlock(&g_work_lock);
           }
+
+          //---For testing in Test Net only.----------------
+          sleep(4);
+
        }
        // display hashrate
        if (!opt_quiet)
