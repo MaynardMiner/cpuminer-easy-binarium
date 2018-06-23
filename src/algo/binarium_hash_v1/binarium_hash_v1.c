@@ -701,6 +701,8 @@ int scanhash_Binarium_hash_v1( int thr_id, struct work *work, uint32_t max_nonce
               //---] For testing.-------------------------------
               be32enc( &endiandata[19], n );
               Binarium_hash_v1_hash( hash64, &endiandata );
+
+              //applog ( LOG_DEBUG, "DEBUG : scanhash_Binarium_hash_v1 () : n : %u, hash64[7] : %u, Htarg : %u .", n, hash64[7], Htarg );
               //if ( ( hash64[7] & mask ) == 0 )
               //{
               //   applog ( LOG_DEBUG, "DEBUG : scanhash_Binarium_hash_v1 () : hash64 [ 7 ] : %u, mask : %u .", hash64[7], mask );

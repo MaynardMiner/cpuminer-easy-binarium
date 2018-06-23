@@ -9,7 +9,7 @@
 	"pass" : "cpuminer",
 
 	"algo" : "Binarium_hash_v1",
-	"threads" : 1,
+	"threads" : 3,
 	"cpu-priority" : 0,
 	"cpu-affinity" : -1,
 
