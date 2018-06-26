@@ -50,11 +50,11 @@ $ ./build-linux.sh
 
 https://gmplib.org/
 
-./configure --host=x86_64-w64-mingw32 --enable-static CFLAGS="-static -DCURL_STATICLIB" --disable-shared .
+./configure --host=x86_64-w64-mingw32 --enable-static CFLAGS="-static" --disable-shared .
 
-make.
+make .
 
-- Then paste you according paths into winbuild.sh file in places of these : --with-curl=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/curl-7.60.0 --with-crypto=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/openssl-1.0.2o --with-gmp=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/gmp-6.1.2 .
+- Then paste your according paths into winbuild.sh file in places of these : --with-curl=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/curl-7.60.0 --with-crypto=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/openssl-1.0.2o --with-gmp=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/gmp-6.1.2 .
 
 - run this script.
 
