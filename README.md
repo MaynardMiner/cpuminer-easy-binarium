@@ -29,6 +29,28 @@ automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libg
 
 $ ./build-linux.sh
 
+### Cross-compilation from Linux to Windows
+- Download and compile cURL sources :
+ https://github.com/curl/ ,
+ ./configure --host=x86_64-w64-mingw32 --disable-ldap --disable-ldaps --enable-static CFLAGS="-static -DCURL_STATICLIB" --disable-shared
+ make .
+
+- Download and compile OpenSSL sources :
+ https://www.openssl.org ,
+ ./Configure --cross-compile-prefix=x86_64-w64-mingw32- mingw64
+ make .
+
+- Download and compile GMP :
+https://gmplib.org/
+./configure --host=x86_64-w64-mingw32 --enable-static CFLAGS="-static -DCURL_STATICLIB" --disable-shared .
+make.
+
+- Then paste you according paths into winbuild.sh file in places of these : --with-curl=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/curl-7.60.0 --with-crypto=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/openssl-1.0.2o --with-gmp=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/gmp-6.1.2 .
+
+- run this script.
+
+- Now everything should be compiled.
+
 
 How to Mine
 ------------

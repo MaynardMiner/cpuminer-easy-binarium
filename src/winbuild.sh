@@ -18,9 +18,19 @@ rm -f config.status
 # Debian 7.7 / Ubuntu 14.04 (gcc 4.7+)
 #extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores"
 
-CFLAGS="-O3 -march=native -Wall" CXXFLAGS="$CFLAGS -std=gnu++11 -fpermissive" ./configure --with-curl=/home/rodion/Downloads/Development/Libraries/curl-7.60.0/ --with-crypto=/home/rodion/Downloads/Development/Libraries/openssl-1.0.2o/ --with-gmp=/home/rodion/Downloads/Development/Libraries/gmp-6.1.2/ --host=x86_64-w64-mingw32
+#-O3  -march=native
+#-std=gnu++11 -g
+# --with-openldap=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/openldap-HEAD-465b1c5
+CFLAGS="-O1 -Wall -march=native -static -DCURL_STATICLIB" CXXFLAGS="$CFLAGS -std=gnu++11 -fpermissive" LDFLAGS="-lws2_32" CCLD="x86_64-w64-mingw32-ld" CXXLD="x86_64-w64-mingw32-ld" ./configure --with-curl=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/curl-7.60.0 --with-crypto=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/openssl-1.0.2o --with-gmp=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/gmp-6.1.2 --host=x86_64-w64-mingw32 --enable-static
 
 make -j 4
 
 #strip -s cpuminer
-strip -p --strip-debug --strip-unneeded cpuminer.exe
+#strip -p --strip-debug --strip-unneeded cpuminer.exe
+
+#./Configure --cross-compile-prefix=x86_64-w64-mingw32- mingw64
+#--disable-ldap --disable-ldaps
+#./configure --host=x86_64-w64-mingw32 --disable-ldap --disable-ldaps --enable-static CFLAGS="-static -DCURL_STATICLIB" --disable-shared
+#CXXLD = x86_64-w64-mingw32-ld
+
+#cpuminer_LINK = $(CXXLD) $(AM_CXXFLAGS) $(cpuminer_LDFLAGS) $(LDFLAGS)
