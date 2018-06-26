@@ -15,11 +15,12 @@ rm -f config.status
 #-Wall
 #-std=gnu++11
 #-march=$1 -mtune=$1
+#-fPIC LDFLAGS="-shared"
 
 build(){
 	echo " "
 	clear
-  FLAGS="-O1 -march=$1 -mtune=$1"
+  FLAGS="-O1 -g -march=$1 -mtune=$1"
 	CFLAGS="$FLAGS" CXXFLAGS="$CFLAGS -std=c++11" ./configure --with-curl
 	make -j 4
 
@@ -36,4 +37,4 @@ build native
 
 ####################################################
 
-strip -s cpuminer
+#strip -s cpuminer

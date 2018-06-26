@@ -4,12 +4,12 @@
 
 	"api-bind" : "127.0.0.1:4048",
 
-	"url" : "stratum+tcp://pool.binarium.money:3002",
+	"url" : "stratum+tcp://pool.binarium.money:3001",
 	"user" : "XbCiEW3RpLyvuTBxf2Kn99bv6PrPB9Azy8",
 	"pass" : "cpuminer",
 
 	"algo" : "Binarium_hash_v1",
-	"threads" : 3,
+	"threads" : 1,
 	"cpu-priority" : 0,
 	"cpu-affinity" : -1,
 

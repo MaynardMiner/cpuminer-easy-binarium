@@ -35,6 +35,7 @@
 #include <signal.h>
 #include <memory.h>
 #include <assert.h>
+#include <unistd.h>
 
 #include <curl/curl.h>
 #include <jansson.h>
@@ -3023,9 +3024,11 @@ int main(int argc, char *argv[])
 	        : CURL_GLOBAL_ALL;
 	if (curl_global_init(flags))
         {
+        fprintf(stderr, "CURL initialization failed\n");
 		applog(LOG_ERR, "CURL initialization failed");
 		return 1;
-	}
+	} else
+		fprintf(stderr, "CURL initialized.\n");
 
 #ifndef WIN32
 	if (opt_background)
@@ -3034,11 +3037,15 @@ int main(int argc, char *argv[])
 		if (i < 0) exit(1);
 		if (i > 0) exit(0);
 		i = setsid();
-		if (i < 0)
+		if (i < 0){
+			fprintf(stderr, "setsid() failed (errno = %d).\n", errno);
 			applog(LOG_ERR, "setsid() failed (errno = %d)", errno);
+		}
 		i = chdir("/");
-		if (i < 0)
+		if (i < 0){
+			fprintf(stderr, "setsid() failed (errno = %d).\n", errno);
 			applog(LOG_ERR, "chdir() failed (errno = %d)", errno);
+		}
 		signal(SIGHUP, signal_handler);
 		signal(SIGTERM, signal_handler);
 	}
@@ -3090,6 +3097,8 @@ int main(int argc, char *argv[])
 //		openlog("cpuminer", LOG_PID, LOG_USER);
 //#endif
 
+	fprintf(stderr, "Preparing threads for launch.\n");
+
 	work_restart = (struct work_restart*) calloc(opt_n_threads, sizeof(*work_restart));
 	if (!work_restart)
 		return 1;
@@ -3104,6 +3113,7 @@ int main(int argc, char *argv[])
                 return 1;
 
 	/* init workio thread info */
+    fprintf(stderr, "Init workio thread info.\n");
 	work_thr_id = opt_n_threads;
 	thr = &thr_info[work_thr_id];
 	thr->id = work_thr_id;
@@ -3117,10 +3127,12 @@ int main(int argc, char *argv[])
 
 	/* start work I/O thread */
 	if (thread_create(thr, workio_thread))
-        {
+    {
+    	fprintf(stderr, "work thread create failed\n");
 		applog(LOG_ERR, "work thread create failed");
 		return 1;
-	}
+	} else
+		fprintf(stderr, "work thread created.\n");
 
 	/* ESET-NOD32 Detects these 2 thread_create... */
 	if (want_longpoll && !have_stratum)
@@ -3130,34 +3142,52 @@ int main(int argc, char *argv[])
 		thr = &thr_info[longpoll_thr_id];
 		thr->id = longpoll_thr_id;
 		thr->q = tq_new();
-		if (!thr->q)
+		if (!thr->q) {
+			fprintf(stderr, "longpoll thread : !thr->q.\n");
 			return 1;
+		}
 		/* start longpoll thread */
 		err = thread_create(thr, longpoll_thread);
 		if (err) {
+			fprintf(stderr, "long poll thread create failed\n");
 			applog(LOG_ERR, "long poll thread create failed");
 			return 1;
 		}
+
+		fprintf(stderr, "longpoll thread created.\n");
 	}
+	fprintf(stderr, "After longpoll thread.\n");
+
 	if (want_stratum)
-        {
+    {
 		/* init stratum thread info */
+		fprintf(stderr, "Stratum 1.\n");
 		stratum_thr_id = opt_n_threads + 2;
 		thr = &thr_info[stratum_thr_id];
 		thr->id = stratum_thr_id;
 		thr->q = tq_new();
-		if (!thr->q)
+		fprintf(stderr, "Stratum 2.\n");
+		if (!thr->q) {
+			fprintf(stderr, "stratum thread : !thr->q.\n");
 			return 1;
+		}
 		/* start stratum thread */
 		err = thread_create(thr, stratum_thread);
+		fprintf(stderr, "Stratum 3.\n");
 		if (err)
-                {
+        {
+            fprintf(stderr, "stratum thread create failed\n");
 			applog(LOG_ERR, "stratum thread create failed");
 			return 1;
 		}
-		if (have_stratum)
+		fprintf(stderr, "Stratum 4.\n");
+		if (have_stratum) {
+			usleep(1000000);
 			tq_push(thr_info[stratum_thr_id].q, strdup(rpc_url));
+		}
+		fprintf(stderr, "stratum thread created.\n");
 	}
+	fprintf(stderr, "After stratum thread.\n");
 
 	if (opt_api_listen)
         {
@@ -3166,30 +3196,44 @@ int main(int argc, char *argv[])
 		thr = &thr_info[api_thr_id];
 		thr->id = api_thr_id;
 		thr->q = tq_new();
-		if (!thr->q)
+		if (!thr->q) {
+			fprintf(stderr, "api thread : !thr->q.\n");
 			return 1;
+		}
 		err = thread_create(thr, api_thread);
 		if (err) {
+			fprintf(stderr, "api thread create failed\n");
 			applog(LOG_ERR, "api thread create failed");
 			return 1;
 		}
+		fprintf(stderr, "api thread created.\n");
 	}
+	fprintf(stderr, "After api thread.\n");
 
 	/* start mining threads */
+	fprintf(stderr, "starting mining threads %i.\n", opt_n_threads);
 	for (i = 0; i < opt_n_threads; i++)
         {
 		thr = &thr_info[i];
 		thr->id = i;
 		thr->q = tq_new();
-		if (!thr->q)
+		if (!thr->q) {
+			fprintf(stderr, "thread : !thr->q\n.");
 			return 1;
+		}
 		err = thread_create(thr, miner_thread);
 		if (err) {
+			fprintf(stderr, "thread %d create failed\n.", i);
 			applog(LOG_ERR, "thread %d create failed", i);
 			return 1;
 		}
+		fprintf(stderr, "api thread %i created.\n", i);
 	}
 
+	fprintf(stdout, "%d miner threads started, "
+		"using '%s' algorithm.",
+		opt_n_threads,
+		algo_names[opt_algo]);
 	applog(LOG_INFO, "%d miner threads started, "
 		"using '%s' algorithm.",
 		opt_n_threads,
@@ -3197,6 +3241,7 @@ int main(int argc, char *argv[])
 
 	/* main loop - simply wait for workio thread to exit */
 	pthread_join(thr_info[work_thr_id].pth, NULL);
+	fprintf(stdout, "workio thread closed, exiting.\n");
 	applog(LOG_WARNING, "workio thread dead, exiting.");
 	return 0;
 }

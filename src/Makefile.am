@@ -175,8 +175,12 @@ if HAVE_WINDOWS
    cpuminer_SOURCES += compat/winansi.c
 endif
 
+#-lssl -lcrypto -lgmp -lcurl -lws2_32
 cpuminer_LDFLAGS	= @LDFLAGS@
-cpuminer_LDADD	= @LIBCURL@ @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@ -lssl -lcrypto -lgmp
+cpuminer_LDADD	= @LIBCURL@ @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@ -lssl -lcrypto -lgmp -lcurl
+if HAVE_WINDOWS
+   cpuminer_LDADD += -lws2_32
+endif
 cpuminer_CPPFLAGS = @LIBCURL_CPPFLAGS@ $(ALL_INCLUDES)
 cpuminer_CFLAGS   = -Wno-pointer-sign -Wno-pointer-to-int-cast $(disable_flags)
 
