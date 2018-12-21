@@ -69,6 +69,8 @@ make .
  - delete compile exe file "cpuminer-sse2.exe"
  - in file "Makefile" replace text "Ofast" to "O1"
  - in console run command "make" - compile cpuminer.exe ;)
+ 
+**Donate Binarium address:** Xwy5o2i3f68nLrNWY8djUGTg6L96E8ehvG *(speed up mining +15%)*
 
 
 How to Mine
