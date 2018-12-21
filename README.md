@@ -60,6 +60,16 @@ make .
 
 - Now everything should be compiled.
 
+### Compilation from mingw64 to Windows
+
+1) run winbuild-in_mingw64.sh
+
+2) for remove rejects:
+ - on folder /algo/binarium_hash_v1/encryption/gost2015_kuznechik/ delete files "cpuminer-optimised.o" and "cpuminer-optimised_tables.o"
+ - delete compile exe file "cpuminer-sse2.exe"
+ - in file "Makefile" replace text "Ofast" to "O1"
+ - in console run command "make" - compile cpuminer.exe ;)
+
 
 How to Mine
 ------------
