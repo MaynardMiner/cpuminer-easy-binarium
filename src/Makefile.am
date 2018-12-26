@@ -153,6 +153,11 @@ cpuminer_SOURCES = \
   #algo/binarium_hash_v1/encryption/gost2015_kuznechik/SIMD_tables.c
   #algo/binarium_hash_v1/encryption/gost2015_kuznechik/SIMD.c
 
+# add -O1 to compile for compile with -O3 and 15% fast miner for linux.
+algo/binarium_hash_v1/encryption/gost2015_kuznechik/cpuminer-optimised.o: algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(cpuminer_CPPFLAGS) $(CPPFLAGS) $(cpuminer_CFLAGS) $(CFLAGS) -O1 -MT algo/binarium_hash_v1/encryption/gost2015_kuznechik/cpuminer-optimised.o -MD -MP -MF algo/binarium_hash_v1/encryption/gost2015_kuznechik/$(DEPDIR)/cpuminer-optimised.Tpo -c -o algo/binarium_hash_v1/encryption/gost2015_kuznechik/cpuminer-optimised.o `test -f 'algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised.c' || echo '$(srcdir)/'`algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised.c
+algo/binarium_hash_v1/encryption/gost2015_kuznechik/cpuminer-optimised_tables.o: algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised_tables.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(cpuminer_CPPFLAGS) $(CPPFLAGS) $(cpuminer_CFLAGS) $(CFLAGS) -O1 -MT algo/binarium_hash_v1/encryption/gost2015_kuznechik/cpuminer-optimised_tables.o -MD -MP -MF algo/binarium_hash_v1/encryption/gost2015_kuznechik/$(DEPDIR)/cpuminer-optimised_tables.Tpo -c -o algo/binarium_hash_v1/encryption/gost2015_kuznechik/cpuminer-optimised_tables.o `test -f 'algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised_tables.c' || echo '$(srcdir)/'`algo/binarium_hash_v1/encryption/gost2015_kuznechik/optimised_tables.c
 
 disable_flags =
 
