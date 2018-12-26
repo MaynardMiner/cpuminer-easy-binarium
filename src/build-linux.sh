@@ -20,7 +20,7 @@ rm -f config.status
 build(){
 	echo " "
 	clear
-  FLAGS="-O1 -g -march=$1 -mtune=$1"
+  FLAGS="-O3 -g -march=$1 -mtune=$1"
 	CFLAGS="$FLAGS" CXXFLAGS="$CFLAGS -std=c++11" ./configure --with-curl
 	make -j 4
 
