@@ -21,7 +21,7 @@ rm -f config.status
 #-O3  -march=native
 #-std=gnu++11 -g
 # --with-openldap=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/openldap-HEAD-465b1c5
-CFLAGS="-O1 -Wall -march=native -static -DCURL_STATICLIB" CXXFLAGS="$CFLAGS -std=gnu++11 -fpermissive" LDFLAGS="-lws2_32" CCLD="x86_64-w64-mingw32-ld" CXXLD="x86_64-w64-mingw32-ld" ./configure --with-curl=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/curl-7.60.0 --with-crypto=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/openssl-1.0.2o --with-gmp=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/gmp-6.1.2 --host=x86_64-w64-mingw32 --enable-static
+CFLAGS="-O3 -Wall -march=native -static -DCURL_STATICLIB" CXXFLAGS="$CFLAGS -std=gnu++11 -fpermissive" LDFLAGS="-lws2_32" CCLD="x86_64-w64-mingw32-ld" CXXLD="x86_64-w64-mingw32-ld" ./configure --with-curl=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/curl-7.60.0 --with-crypto=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/openssl-1.0.2o --with-gmp=/media/rodion/SSD_Linux/CryptoCurrencies/Utilities/gmp-6.1.2 --host=x86_64-w64-mingw32 --enable-static
 
 make -j 4
 
