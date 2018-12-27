@@ -20,6 +20,15 @@ cpuminer-sse2.exe -a Binarium_hash_v1 -o stratum+tcp://binarium.cpu-pool.com:633
 **Donate Binarium address:** Xwy5o2i3f68nLrNWY8djUGTg6L96E8ehvG
 
 
+### Test new miner on ubnuntu 16.04
+Test conducted several times. In tests, the parameter was used. --bench.
+```
+CPU: G3250
+Bubasik miner - 27 kH/s
+official miner -  24.44 kH/s
+```
+
+
 Build Instructions
 ------------------
 
