@@ -4,6 +4,21 @@ Whit credits to Jay D Dee's, TPruvot, Lucas Jones, elmad, palmd, djm34, pooler, 
 
 All of the code is believed to be open and free.
 
+### Bubasik edition "cpuminer-easy" miner
+Binarium optimized miner win_x64 and linux +10-15% speed ;)
+
+Compile with GCC 7.3
+ - Compile with GCC 7.3
+ - Optimized compile parametr GCC
+ - Compile in windows for windows (minGW64)
+
+**Sample bat file:**
+```
+cpuminer-sse2.exe -a Binarium_hash_v1 -o stratum+tcp://binarium.cpu-pool.com:63378 -u WALLET_ADDRESS
+```
+
+**Donate Binarium address:** Xwy5o2i3f68nLrNWY8djUGTg6L96E8ehvG
+
 
 Build Instructions
 ------------------
