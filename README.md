@@ -17,6 +17,12 @@ Compile with GCC 7.3
 cpuminer-sse2.exe -a Binarium_hash_v1 -o stratum+tcp://binarium.cpu-pool.com:63378 -u WALLET_ADDRESS
 ```
 
+
+
+**Tested on Binariumpools:**
+- http://binarium.cpu-pool.com/
+- https://pool.rplant.xyz/
+
 **Donate Binarium address:** Xwy5o2i3f68nLrNWY8djUGTg6L96E8ehvG
 
 
